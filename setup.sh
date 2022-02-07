@@ -1,13 +1,9 @@
 #!/bin/bash
 
+source ./util.sh # contains #print blue
+
 bluetooth_dir=/etc/bluetooth
 bluetooth_config=$bluetooth_dir/main.conf
-
-BLUE='\033[0;36m'
-NC='\033[0m' # No Color
-print_blue() {
-    printf "${BLUE}$1${NC}\n"
-}
 
 # install dependencies
 
@@ -36,5 +32,3 @@ DiscoverableTimeout = 0\
 print_blue "restarting bluetooth service and rebooting device..."
 sudo systemctl restart bluetooth
 sudo reboot
-
-
