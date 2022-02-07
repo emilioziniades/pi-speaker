@@ -33,7 +33,7 @@ print_blue "adding config to $bluetooth_config..."
 sudo mkdir -p $bluetooth_dir
 sudo touch $bluetooth_config
 
-sed -f - $bluetooth_config | sudo tee $bluetooth_config << EOF
+sudo sed -i "_backup" -f - $bluetooth_config << EOF
 s/\(\[General\]\)/\1\\
 \\
 # (added by pi-speaker setup script)\\
