@@ -29,4 +29,13 @@ else
     print_red "pulse audio not started..."
 fi
 
-# print three lines of systemctl status bluetoothctl
+
+# launch pulseaudio on boot and configure autoload
+
+systemctl --user enable pulseaudio
+print_blue "pulseaudio will launch on startup"
+
+sudo raspi-config nonint do_boot_behaviour "B2 Console Autologin"
+print_blue "raspi-config edited: console will autologin on startup"
+
+
