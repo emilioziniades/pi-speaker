@@ -1,25 +1,30 @@
 #!/bin/bash
 
-config="\n#.....( added by pi-speaker/setup.sh )\nClass = 0x41C\nDiscoverableTimeout = 0\n#....."
 bluetooth_dir=/etc/bluetooth
 bluetooth_config=$bluetooth_dir/main.conf
 
+BLUE='\033[0;36m'
+NC='\033[0m' # No Color
+print_blue() {
+    printf "${BLUE}$1${NC}\n"
+}
+
 # install dependencies
 
-echo "installing required packages for bluetooth music hub..."
+print_blue "installing required packages for bluetooth music hub..."
 sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
 
 # create bluetooth group
 
-echo "creating bluetooth group and adding current user..."
+print_blue "creating bluetooth group and adding current user..."
 sudo groupadd bluetooth
 sudo usermod -a -G bluetooth $USER
 
 # add relevant configuration
 
-echo "adding config to /etc/bluetooth/main.conf..."
+print_blue "adding config to /etc/bluetooth/main.conf..."
 sudo mkdir -p $bluetooth_dir
-touch $bluetooth_config
+sudo touch $bluetooth_config
 
 cat $bluetooth_config | sed 's/\(\[General\]\)/\1\
 \
@@ -28,6 +33,8 @@ Class = 0x41C\
 DiscoverableTimeout = 0\
 # ...../' | sudo tee $bluetooth_config > /dev/null
 
-echo "restarting bluetooth service and rebooting device..."
+print_blue "restarting bluetooth service and rebooting device..."
 sudo systemctl restart bluetooth
 sudo reboot
+
+
