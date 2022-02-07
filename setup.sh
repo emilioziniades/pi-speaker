@@ -13,12 +13,13 @@ sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
 
 echo "creating bluetooth group and adding current user..."
 sudo groupadd bluetooth
-sudo usermod -a -G bluetooth $(whoami)
+sudo usermod -a -G bluetooth $USER
 
 # add relevant configuration
 
 echo "adding config to /etc/bluetooth/main.conf..."
 sudo mkdir -p $bluetooth_dir
+touch $bluetooth_config
 
 cat $bluetooth_config | sed 's/\(\[General\]\)/\1\
 \
