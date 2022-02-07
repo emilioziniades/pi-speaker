@@ -35,7 +35,8 @@ fi
 systemctl --user enable pulseaudio
 print_blue "pulseaudio will launch on startup"
 
+sudo systemctl enable bt-agent
+print_blue "bt-agent (bluez-tools) will launch on startup"
+
 sudo raspi-config nonint do_boot_behaviour "B2 Console Autologin"
 print_blue "raspi-config edited: console will autologin on startup"
-
-

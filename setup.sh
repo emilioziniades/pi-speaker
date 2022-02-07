@@ -8,7 +8,7 @@ bluez_tools_config=/etc/systemd/system/bt-agent.service
 
 # install dependencies
 
-print_blue "installing required packages for bluetooth music hub..."
+print_blue "installing required packages for pi-speaker..."
 sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth bluez-tools
 
 # create bluetooth group
