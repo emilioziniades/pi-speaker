@@ -6,7 +6,7 @@ bluetooth_dir=/etc/bluetooth
 # install dependencies
 
 echo "installing required packages for bluetooth music hub"
-sudo apt-get install pulseaudio pulseaudio-module-bluetooth
+sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth
 
 # create bluetooth group
 
@@ -18,7 +18,7 @@ sudo usermod -a -G bluetooth $(whoami)
 
 echo "adding config to /etc/bluetooth/main.conf"
 sudo mkdir -p $bluetooth_dir
-echo -e $config | sudo teee -a $bluetooth_dir/main.conf > /dev/null
+echo -e $config | sudo tee -a $bluetooth_dir/main.conf > /dev/null
 
 echo "restarting bluetooth and rebooting device"
 sudo systemctl restart bluetooth
