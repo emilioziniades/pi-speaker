@@ -33,7 +33,7 @@ DiscoverableTimeout = 0\
 
     #bluez-tools config
 print_blue "adding config to $bluez_tools_config..."
-sudo cat > $bluez_tools_config << EOF
+cat <<'EOF' | sudo tee $bluez_tools_config
 [Unit]
 Description=Bluetooth Auth Agent
 After=bluetooth.service
