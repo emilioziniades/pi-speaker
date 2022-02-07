@@ -36,3 +36,5 @@ DiscoverableTimeout = 0\
 print_blue "restarting bluetooth service and rebooting device..."
 sudo systemctl restart bluetooth
 sudo reboot
+
+
