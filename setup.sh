@@ -25,7 +25,7 @@ cat $bluetooth_config | sed 's/\(\[General\]\)/\1\
 # ..... (added by pi-speaker.sh)\
 Class = 0x41C\
 DiscoverableTimeout = 0\
-# ...../' > $bluetooth_config
+# ...../' | sudo tee $bluetooth_config > /dev/null
 
 echo "restarting bluetooth service and rebooting device..."
 sudo systemctl restart bluetooth
