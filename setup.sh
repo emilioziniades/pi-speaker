@@ -33,14 +33,17 @@ print_blue "adding config to $bluetooth_config..."
 sudo mkdir -p $bluetooth_dir
 sudo touch $bluetooth_config
 
-cat $bluetooth_config | sed "s/\(\[General\]\)/\1\
-\
-# ..... (added by pi-speaker.sh)\
-Class = 0x41C\
-DiscoverableTimeout = 0\
-Name = $NAME\
-# ...../" | sudo tee $bluetooth_config > /dev/null
-
+sed -f - $bluetooth_config | sudo tee $bluetooth_config << EOF
+s/\(\[General\]\)/\1\\
+\\
+# (added by pi-speaker setup script)\\
+# \.\.\.\.\.\\
+Class = 0x41C\\
+DiscoverableTimeout = 0\\
+Name = $NAME\\
+# \.\.\.\.\.\\
+/
+EOF
 
 ##### bluez-tools config
 print_blue "adding config to $bluez_tools_config..."
