@@ -48,7 +48,8 @@ Name = $NAME\\
 EOF
 
 # disable avrcp so that connected device can control volume
-sudo sed -i 's/\(ExecStart.*\)/\1 --noplugin=avrcp/' $bluetooth_service
+# TODO : should use $bluetooth_service in /etc/systemd/system, but not working for some reason
+sudo sed -i 's/\(ExecStart.*\)/\1 --noplugin=avrcp/' /lib/systemd/system/bluetooth.service
 
 ##### bluez-tools config
 print_blue "adding config to $bluez_tools_service..."
