@@ -3,16 +3,16 @@
 source ./util.sh # contains print_blue and print_red
 
 bluetooth_dir=/etc/bluetooth
-pin_file=$bluetooth_dir/pin.conf
 bluetooth_config=$bluetooth_dir/main.conf
-bluez_tools_config=/etc/systemd/system/bt-agent.service
+pin_file=$bluetooth_dir/pin.conf
+bluez_tools_service=/etc/systemd/system/bt-agent.service
 
+# obtain device name and pin from user
 
 read -p "Enter name of device: " NAME
 read -p "Enter pin: " PIN
-echo $PIN | sudo tee $pin_file > /dev/null 
+echo -e "*\t$PIN" | sudo tee $pin_file > /dev/null
 sudo chmod 600 $pin_file
-
 
 
 # install dependencies
@@ -23,7 +23,7 @@ sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth bluez-tools
 # create bluetooth group
 
 print_blue "creating bluetooth group and adding current user..."
-sudo groupadd bluetooth
+sudo groupadd -f bluetooth
 sudo usermod -a -G bluetooth $USER
 
 # add relevant configuration
@@ -46,8 +46,8 @@ Name = $NAME\\
 EOF
 
 ##### bluez-tools config
-print_blue "adding config to $bluez_tools_config..."
-cat <<EOF | sudo tee $bluez_tools_config > /dev/null
+print_blue "adding config to $bluez_tools_service..."
+cat <<EOF | sudo tee $bluez_tools_service > /dev/null
 [Unit]
 Description=Bluetooth Auth Agent
 After=bluetooth.service

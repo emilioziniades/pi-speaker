@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-source ./util.sh # contains print_blue
+source ./util.sh # contains print_blue and print_red
 
 # activate bluetoothctl
 
