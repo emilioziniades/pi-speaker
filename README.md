@@ -14,7 +14,7 @@ Do not blindly run scripts off the internet. Do your own auditing. This script m
 
 ## Instructions
 
-This script assumes that 1) You have a working install of Raspberry Pi OS and 2) You have installed git.
+These instructions assume that 1) You have a working install of Raspberry Pi OS and 2) You have installed git.
 
 First, clone the repo.
 
@@ -42,7 +42,7 @@ The script should then run. Status of the script's progress will be indicated in
 restarting device...
 ```
 
-A reboot is required for the changes to take effect. Once the device has successfully restarted, you should be able to connect to the Raspberry Pi using the name and PIN chosen above. Plug your speakers into the Raspberry Pi's AUX port and enjoy the music!
+That's it! A reboot is required for the changes to take effect. Once the device has successfully restarted, you should be able to connect to the Raspberry Pi using the name and PIN chosen above. Plug your speakers into the Raspberry Pi's AUX port and enjoy the music!
 
 ## Contributions
 

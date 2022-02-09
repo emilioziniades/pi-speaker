@@ -31,9 +31,9 @@ SERVICE_DIR=/etc/systemd/system
 BT_AGENT_SERVICE=$SERVICE_DIR/bt-agent.service
 BLUETOOTH_SERVICE=$SERVICE_DIR/bluetooth.target.wants/bluetooth.service
 
-# Pretty Start Screen
+# Banner
 
-#TODO include this here
+cat banner.txt
 
 # User Input
 
@@ -85,8 +85,7 @@ print-yellow "after"
 print-yellow "$( cat $BLUETOOTH_CONFIG )"
 
 # disable avrcp so that connected device can control volume
-# TODO : should use $BLUETOOTH_SERVICE in /etc/systemd/system, but not working for some reason
-#sudo sed -i 's/\(ExecStart.*\)/\1 --noplugin=avrcp,sap/' /lib/systemd/system/bluetooth.service
+sudo sed --in-place --follow-symlinks 's/\(ExecStart.*\)/\1 --noplugin=avrcp,sap/' $BLUETOOTH_SERVICE
 
 #    /etc/system/systemd/bt-agent.service
 
