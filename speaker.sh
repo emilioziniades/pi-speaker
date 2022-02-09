@@ -23,9 +23,6 @@ print-yellow()
     print-colour 3 "$1"
 }
 
-print-yellow "Hey this is a test!"
-exit 0
-
 # Variables
 
 BLUETOOTH_DIR=/etc/bluetooth
@@ -44,8 +41,14 @@ BLUETOOTH_SERVICE=$SERVICE_DIR/bluetooth.target.wants/bluetooth.service
 
 # install dependencies
 
+print-yellow "these are the installed dependencies"
+print-yellow "$(sudo apt list --installed | grep -e "pulseaudio" -e "bluez"))"
+
 print-blue "installing required packages for pi-speaker..."
 sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth bluez-tools
+
+print-yellow "After install"
+print-yellow "$(sudo apt list --installed | grep -e "pulseaudio" -e "bluez"))"
 
 # create bluetooth group
 
@@ -57,6 +60,9 @@ sudo usermod -a -G bluetooth $USER
 
 ##### bluetoothctl config
 print-blue "adding config to $BLUETOOTH_CONFIG..."
+
+print-yellow "Before"
+print-yellow "$( cat $BLUETOOTH_CONFIG )"
 
 sudo sed -i -f - $BLUETOOTH_CONFIG << EOF
 s/\(\[General\]\)/\1\\
@@ -70,12 +76,21 @@ Name = $NAME\\
 /
 EOF
 
+print-yellow "after"
+print-yellow "$( cat $BLUETOOTH_CONFIG )"
+
+
 # disable avrcp so that connected device can control volume
 # TODO : should use $BLUETOOTH_SERVICE in /etc/systemd/system, but not working for some reason
 #sudo sed -i 's/\(ExecStart.*\)/\1 --noplugin=avrcp,sap/' /lib/systemd/system/bluetooth.service
 
+
 ##### bluez-tools config
 print-blue "adding config to $BT_AGENT_SERVICE..."
+
+print-yellow "Before"
+print-yellow "$( cat $BT_AGENT_SERVICE )"
+
 cat <<EOF | sudo tee $BT_AGENT_SERVICE > /dev/null
 [Unit]
 Description=Bluetooth Auth Agent
@@ -84,11 +99,18 @@ PartOf=bluetooth.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/bt-agent -c NoInputNoOutput -p $PIN_FILE
+ExecStart=/usr/bin/bt-agent -c NoInputNoOutput
 
 [Install]
 WantedBy=bluetooth.target
 EOF
+
+#TODO include this line when you add pin
+# ExecStart=/usr/bin/bt-agent -c NoInputNoOutput -p $PIN_FILE
+
+
+print-yellow "After"
+print-yellow "$( cat $BT_AGENT_SERVICE )"
 
 
 #TODO reincorporate these pin related functionalities
@@ -96,42 +118,44 @@ EOF
 # ExecStartPost=/bin/sleep 1
 # ExecStartPost=/bin/hciconfig hci0 sspmode 0
 
-print-blue "restarting bluetooth service and rebooting device..."
-sudo systemctl restart bluetooth
 
 ##### from activate .sh
 
 # activate bluetoothctl
 
-print-blue "activating bluetoothctl agent..."
-bluetoothctl -- power on
-bluetoothctl -- discoverable on
-bluetoothctl -- pairable on
-bluetoothctl -- agent on
+#TODO reincorporate this
+# print-blue "activating bluetoothctl agent..."
+# bluetoothctl -- power on
+# bluetoothctl -- discoverable on
+# bluetoothctl -- pairable on
+# bluetoothctl -- agent on
 
-sudo systemctl status bluetooth > /dev/null
+# sudo systemctl status bluetooth > /dev/null
 
-if [ $? -eq 0 ]; then
-    print-blue "bluetoothctl active..."
-else
-    print-red "bluetoothctl not active..."
-fi
+# if [ $? -eq 0 ]; then
+    # print-blue "bluetoothctl active..."
+# else
+    # print-red "bluetoothctl not active..."
+# fi
 
 # start pulseaudio
 
-print-blue "starting pulseaudio..."
-pulseaudio --start
-pulseaudio --check
-if [ $? -eq 0 ]; then
-    print-blue "pulse audio started..."
-else 
-    print-red "pulse audio not started..."
-fi
+# print-blue "starting pulseaudio..."
+# pulseaudio --start
+# pulseaudio --check
+# if [ $? -eq 0 ]; then
+    # print-blue "pulse audio started..."
+# else 
+    # print-red "pulse audio not started..."
+# fi
 
 
 # launch pulseaudio on boot and configure autoload
 
 sudo systemctl daemon-reload
+
+print-blue "restarting bluetooth service..."
+sudo systemctl restart bluetooth
 
 systemctl --user enable pulseaudio
 print-blue "pulseaudio will launch on startup"
