@@ -100,7 +100,7 @@ PartOf=bluetooth.service
 [Service]
 Type=simple
 ExecStart=/usr/bin/bt-agent -c NoInputNoOutput
-ExecStart=/usr/bin/bluetoothctl -- power on && /usr/bin/bluetoothctl -- discoverable on && /usr/bin/bluetoothctl -- pairable on && /usr/bin/bluetoothctl -- agent on
+ExecStartPost=/usr/bin/bluetoothctl -- power on && /usr/bin/bluetoothctl -- discoverable on && /usr/bin/bluetoothctl -- pairable on && /usr/bin/bluetoothctl -- agent on
 
 [Install]
 WantedBy=bluetooth.target
