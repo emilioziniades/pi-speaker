@@ -15,7 +15,9 @@ BLUETOOTH_SERVICE=$SERVICE_DIR/bluetooth.target.wants/bluetooth.service
 
 # Banner
 
-print-blue $(cat banner.txt)
+tput setaf 6
+cat banner.txt
+tput sgr 0
 
 # User Input
 
