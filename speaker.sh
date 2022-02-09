@@ -21,8 +21,8 @@ tput sgr 0
 
 # User Input
 
-read -p "$(print-blue "Enter name of device: ") " NAME
-read -p "$(print-blue "Enter pin: ") " PIN
+read -p "$(print-blue "Enter name of device: ")" NAME
+read -p "$(print-blue "Enter pin: ")" PIN
 
 # Save pin code to /etc/bluetooth/pin.conf
 
@@ -33,7 +33,7 @@ sudo chmod 600 $PIN_FILE
 # Change device name
 
 print-blue "changing device name to $NAME..."
-bluetoothctl -- system-alias "$NAME"
+bluetoothctl -- system-alias "$NAME" > /dev/null
 
 # Dependencies
 
