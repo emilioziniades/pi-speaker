@@ -38,7 +38,7 @@ bluetoothctl -- system-alias "$NAME" > /dev/null
 # Dependencies
 
 print-blue "installing required packages for pi-speaker..."
-sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth bluez-tools > /dev/null
+sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth bluez-tools > /dev/null 2>&1
 
 # Bluetooth Group
 
@@ -99,13 +99,13 @@ print-blue "reloading systemd configuration..."
 sudo systemctl daemon-reload
 
 print-blue "setting pulseaudio to launch on startup..."
-systemctl --user enable pulseaudio
+systemctl --user enable pulseaudio > /dev/null
 
 print-blue "setting bt-agent (bluez-tools) to launch on startup..."
-sudo systemctl enable bt-agent
+sudo systemctl enable bt-agent > /dev/null
 
 print-blue "editing raspi-config to autologin on startup"
-sudo raspi-config nonint do_boot_behaviour "B2 Console Autologin"
+sudo raspi-config nonint do_boot_behaviour "B2 Console Autologin" > /dev/null
 
 
 # Reboot
