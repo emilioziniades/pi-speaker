@@ -31,10 +31,16 @@ SERVICE_DIR=/etc/systemd/system
 BT_AGENT_SERVICE=$SERVICE_DIR/bt-agent.service
 BLUETOOTH_SERVICE=$SERVICE_DIR/bluetooth.target.wants/bluetooth.service
 
+# Pretty Start Screen
+
+#TODO include this here
+
 # User Input
 
 read -p "$(print-yellow "Enter name of device: ") " NAME
 read -p "$(print-yellow "Enter pin: ") " PIN
+
+print-blue "storing PIN code in $PIN_FILE"
 echo -e "*\t$PIN" | sudo tee $PIN_FILE > /dev/null
 sudo chmod 600 $PIN_FILE
 

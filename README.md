@@ -10,11 +10,11 @@ The script makes use of the pulseaudio and the bluez-tools libraries.
 
 ## Caveat
 
-Do not blindly run scripts off the internet. Do your own auditing. This script makes use of sudo commands to install the relevant libraries and update the configuration and systemd service files.
+Do not blindly run scripts off the internet. Do your own auditing. This script makes use of sudo commands to install the relevant libraries and update the configuration and systemd service files. Read through the script and ensure you are happy with what is being executed.
 
 ## Instructions
 
-This script assumes that 1) You have a working install of Raspberry Pi OS and 2) You have git installed.
+This script assumes that 1) You have a working install of Raspberry Pi OS and 2) You have installed git.
 
 First, clone the repo.
 
@@ -26,7 +26,7 @@ Then, move into the directory and run the speaker.sh script.
 
 ```console
 pi@raspberrypi:~$ cd pi-speaker
-pi@raspberrypi:~$ ./speaker.sh
+pi@raspberrypi:~/pi-speaker$ ./speaker.sh
 ```
 
 You'll be prompted to provide a name and PIN code which will be used during bluetooth connection. Pick a non-obvious PIN code. 
