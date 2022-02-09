@@ -10,7 +10,7 @@ The script makes use of the pulseaudio and the bluez-tools libraries.
 
 ## Caveat
 
-Do not blindly run scripts off the internet. Do your own auditing. This script makes use of sudo commands to install the relevant libraries and update the configuration and systemd service files. Read through the script and ensure you are happy with what is being executed.
+This script makes use of sudo commands to install the relevant libraries and update the configuration and systemd service files as root. Read through the script and ensure you are happy with what is being executed.
 
 ## Instructions
 
@@ -46,4 +46,4 @@ That's it! A reboot is required for the changes to take effect. Once the device 
 
 ## Contributions
 
-Any contributions are welcome! Open an issue or submit a pull request.
+Let me know about any bugs by opening an issue. Any contributions are welcome! Identify a feature you want to add, implement it and submit a pull request. 

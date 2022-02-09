@@ -1,26 +1,8 @@
 #!/bin/bash
 
-# Utility Functions
+# Utility Function
 
-print-colour()
-{
-    printf "$(tput setaf $1)$2$(tput sgr 0)\n"
-}
-
-print-blue()
-{
-    print-colour 6 "$1"
-}
-
-print-red()
-{
-    print-colour 1 "$1"
-}
-
-print-yellow()
-{
-    print-colour 3 "$1"
-}
+print-blue() { printf "$(tput setaf 6)$1$(tput sgr 0)\n" ; }
 
 # Variables
 
@@ -33,27 +15,28 @@ BLUETOOTH_SERVICE=$SERVICE_DIR/bluetooth.target.wants/bluetooth.service
 
 # Banner
 
-cat banner.txt
+print-blue $(cat banner.txt)
 
 # User Input
 
-read -p "$(print-yellow "Enter name of device: ") " NAME
-read -p "$(print-yellow "Enter pin: ") " PIN
+read -p "$(print-blue "Enter name of device: ") " NAME
+read -p "$(print-blue "Enter pin: ") " PIN
+
+# Save pin code to /etc/bluetooth/pin.conf
 
 print-blue "storing PIN code in $PIN_FILE"
 echo -e "*\t$PIN" | sudo tee $PIN_FILE > /dev/null
 sudo chmod 600 $PIN_FILE
 
+# Change device name
+
+print-blue "changing device name to $NAME..."
+bluetoothctl -- system-alias "$NAME"
+
 # Dependencies
 
-print-yellow "these are the installed dependencies"
-print-yellow "$(sudo apt list --installed | grep -e "pulseaudio" -e "bluez"))"
-
 print-blue "installing required packages for pi-speaker..."
-sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth bluez-tools
-
-print-yellow "After install"
-print-yellow "$(sudo apt list --installed | grep -e "pulseaudio" -e "bluez"))"
+sudo apt-get install -y pulseaudio pulseaudio-module-bluetooth bluez-tools > /dev/null
 
 # Bluetooth Group
 
@@ -67,72 +50,60 @@ sudo usermod -a -G bluetooth $USER
 
 print-blue "adding config to $BLUETOOTH_CONFIG..."
 
-print-yellow "Before"
-print-yellow "$( cat $BLUETOOTH_CONFIG )"
-
-sudo sed --in-place -f - $BLUETOOTH_CONFIG << EOF
-s/\(\[General\]\)/\1\\
-\\
-# (added by pi-speaker setup script)\\
-# \.\.\.\.\.\\
-Class = 0x41C\\
-DiscoverableTimeout = 0\\
-# \.\.\.\.\.\\
-/
+sudo sed --in-place -f - $BLUETOOTH_CONFIG <<- EOF
+	s/\(\[General\]\)/\1\\
+	\\
+	# (added by pi-speaker setup script)\\
+	# \.\.\.\.\.\\
+	Class = 0x41C\\
+	DiscoverableTimeout = 0\\
+	# \.\.\.\.\.\\
+	/
 EOF
 
-print-yellow "after"
-print-yellow "$( cat $BLUETOOTH_CONFIG )"
+#   /etc/systemd/system/bluetooth.target.wants/bluetooth.service
 
-# disable avrcp so that connected device can control volume
+print-blue "adding config to $BLUETOOTH_SERVICE..."
+
 sudo sed --in-place --follow-symlinks 's/\(ExecStart.*\)/\1 --noplugin=avrcp,sap/' $BLUETOOTH_SERVICE
 
 #    /etc/system/systemd/bt-agent.service
 
 print-blue "adding config to $BT_AGENT_SERVICE..."
 
-print-yellow "Before"
-print-yellow "$( cat $BT_AGENT_SERVICE )"
-
-cat <<EOF | sudo tee $BT_AGENT_SERVICE > /dev/null
-[Unit]
-Description=Bluetooth Auth Agent
-After=bluetooth.service
-PartOf=bluetooth.service
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/bt-agent -c NoInputNoOutput -p $PIN_FILE
-ExecStartPost=/bin/sleep 1
-ExecStartPost=/bin/hciconfig hci0 sspmode 0
-ExecStartPost=/usr/bin/bluetoothctl -- power on
-ExecStartPost=/usr/bin/bluetoothctl -- discoverable on
-ExecStartPost=/usr/bin/bluetoothctl -- pairable on
-ExecStartPost=/usr/bin/bluetoothctl -- agent on
-
-[Install]
-WantedBy=bluetooth.target
+cat <<-EOF | sudo tee $BT_AGENT_SERVICE > /dev/null
+	[Unit]
+	Description=Bluetooth Auth Agent
+	After=bluetooth.service
+	PartOf=bluetooth.service
+	
+	[Service]
+	Type=simple
+	ExecStart=/usr/bin/bt-agent -c NoInputNoOutput -p $PIN_FILE
+	ExecStartPost=/bin/sleep 1
+	ExecStartPost=/bin/hciconfig hci0 sspmode 0
+	ExecStartPost=/usr/bin/bluetoothctl -- power on
+	ExecStartPost=/usr/bin/bluetoothctl -- discoverable on
+	ExecStartPost=/usr/bin/bluetoothctl -- pairable on
+	ExecStartPost=/usr/bin/bluetoothctl -- agent on
+	
+	[Install]
+	WantedBy=bluetooth.target
 EOF
-
-print-yellow "After"
-print-yellow "$( cat $BT_AGENT_SERVICE )"
 
 # Autoload On Boot
 
+print-blue "reloading systemd configuration..."
 sudo systemctl daemon-reload
 
-print-blue "restarting bluetooth service and changing device name..."
-sudo systemctl restart bluetooth
-bluetoothctl -- system-alias "$NAME"
-
+print-blue "setting pulseaudio to launch on startup..."
 systemctl --user enable pulseaudio
-print-blue "pulseaudio will launch on startup"
 
+print-blue "setting bt-agent (bluez-tools) to launch on startup..."
 sudo systemctl enable bt-agent
-print-blue "bt-agent (bluez-tools) will launch on startup"
 
+print-blue "editing raspi-config to autologin on startup"
 sudo raspi-config nonint do_boot_behaviour "B2 Console Autologin"
-print-blue "raspi-config edited: console will autologin on startup"
 
 
 # Reboot
