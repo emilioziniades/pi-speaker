@@ -70,7 +70,7 @@ print-blue "adding config to $BLUETOOTH_CONFIG..."
 print-yellow "Before"
 print-yellow "$( cat $BLUETOOTH_CONFIG )"
 
-sudo sed -i -f - $BLUETOOTH_CONFIG << EOF
+sudo sed --in-place -f - $BLUETOOTH_CONFIG << EOF
 s/\(\[General\]\)/\1\\
 \\
 # (added by pi-speaker setup script)\\
