@@ -6,7 +6,7 @@ Tested on a fresh install of Raspberry Pi OS Lite (Released 28 January 2022, Deb
 
 All credit to DrFunk for his [post on the Raspberry Pi forums](https://forums.raspberrypi.com/viewtopic.php?t=235519). This script basically automates the instructions laid out there. 
 
-This script makes use of the pulseaudio and the bluez-tools libraries.
+The script makes use of the pulseaudio and the bluez-tools libraries.
 
 ## Caveat
 
@@ -29,12 +29,21 @@ pi@raspberrypi:~$ cd pi-speaker
 pi@raspberrypi:~$ ./speaker.sh
 ```
 
-You'll be prompted to provide a name and PIN code which will be used during bluetooth connection. 
+You'll be prompted to provide a name and PIN code which will be used during bluetooth connection. Pick a non-obvious PIN code. 
 
 ```console
 Enter name of device:  pi-speaker
 Enter pin:  1234
 ```
+
+The script should then run. Status of the script's progress will be indicated in blue. If everything ran succesfully, the last message you should see will be an indication that the device is rebooting.
+
+```console
+restarting device...
 ```
 
+A reboot is required for the changes to take effect. Once the device has successfully restarted, you should be able to connect to the Raspberry Pi using the name and PIN chosen above. Plug your speakers into the Raspberry Pi's AUX port and enjoy the music!
 
+## Contributions
+
+Any contributions are welcome! Open an issue or submit a pull request.
