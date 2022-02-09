@@ -100,14 +100,11 @@ PartOf=bluetooth.service
 [Service]
 Type=simple
 ExecStart=/usr/bin/bt-agent -c NoInputNoOutput
+ExecStart=/usr/bin/bluetoothctl -- power on && /usr/bin/bluetoothctl -- discoverable on && /usr/bin/bluetoothctl -- pairable on && /usr/bin/bluetoothctl -- agent on
 
 [Install]
 WantedBy=bluetooth.target
 EOF
-
-#TODO include this line when you add pin
-# ExecStart=/usr/bin/bt-agent -c NoInputNoOutput -p $PIN_FILE
-
 
 print-yellow "After"
 print-yellow "$( cat $BT_AGENT_SERVICE )"
@@ -117,18 +114,6 @@ print-yellow "$( cat $BT_AGENT_SERVICE )"
 # ExecStart=/usr/bin/bt-agent -c NoInputNoOutput -p $PIN_FILE
 # ExecStartPost=/bin/sleep 1
 # ExecStartPost=/bin/hciconfig hci0 sspmode 0
-
-
-##### from activate .sh
-
-# activate bluetoothctl
-
-#TODO reincorporate this
-# print-blue "activating bluetoothctl agent..."
-# bluetoothctl -- power on
-# bluetoothctl -- discoverable on
-# bluetoothctl -- pairable on
-# bluetoothctl -- agent on
 
 # sudo systemctl status bluetooth > /dev/null
 
