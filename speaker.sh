@@ -71,7 +71,6 @@ s/\(\[General\]\)/\1\\
 # \.\.\.\.\.\\
 Class = 0x41C\\
 DiscoverableTimeout = 0\\
-Name = $NAME\\
 # \.\.\.\.\.\\
 /
 EOF
@@ -117,8 +116,9 @@ print-yellow "$( cat $BT_AGENT_SERVICE )"
 
 sudo systemctl daemon-reload
 
-# print-blue "restarting bluetooth service..."
-# sudo systemctl restart bluetooth
+print-blue "restarting bluetooth service and changing device name..."
+sudo systemctl restart bluetooth
+bluetoothctl -- system-alias "$NAME"
 
 systemctl --user enable pulseaudio
 print-blue "pulseaudio will launch on startup"
