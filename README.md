@@ -1,6 +1,6 @@
 # pi-speaker
 
-Script to setup a Raspberry Pi as a bluetooth speaker.
+Bash script to setup a Raspberry Pi as a bluetooth speaker.
 
 Tested on a Raspberry Pi 3A+ and Raspberry Pi 4, both with a fresh install of Raspberry Pi OS Lite (Released 28 January 2022, Debian 11 bullseye). Raspberry Pi OS Desktop should work the same.
 
